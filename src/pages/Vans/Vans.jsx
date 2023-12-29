@@ -1,25 +1,29 @@
 import React from 'react'
 import { useEffect,useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, useLoaderData } from 'react-router-dom'
+import { getVans } from '../../../api'
+
+
+export function loader() {
+    return getVans()
+}
 
 const Vans = () => {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [vans, setVans] = useState([])
+    const [error, setError] = useState(null)
+
+    
+    const vans = useLoaderData()
 
     const typeFilter = searchParams.get("type")
 
 
-    useEffect(() => {
-        fetch("/api/vans")
-            .then(res => res.json())
-            .then(data => setVans(data.vans))
-    }, [])
-
+    
     const displayedVans = typeFilter
         ? vans.filter(van => van.type === typeFilter)
         : vans
 
-    const vanElements = displayedVans.map(van => (
+    const vanElements = displayedVans?.map(van => (
         <div key={van.id} className="van-tile">
             <Link to={van.id}
             state={{ search: `?${searchParams.toString()}`, 
@@ -35,6 +39,11 @@ const Vans = () => {
             </Link>
         </div>
     ))
+
+    if (error) {
+        return <h1>There was an error: {error.message}</h1>
+    }
+
 
     return (
         <div className="van-list-container">

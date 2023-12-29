@@ -1,5 +1,6 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink ,Link} from "react-router-dom";
+import avatarImg from "../assets/images/avatar-icon.png"
 const Navbar = () => {
   const activeStyle = {
     fontWeight: "bold",
@@ -70,6 +71,12 @@ const Navbar = () => {
             >
               Vans
             </NavLink>
+            <Link to="login" className="login-link">
+                    <img 
+                        src={avatarImg} 
+                        className="login-icon px-2 "
+                    />
+                </Link>
           </nav>
         </div>
       </div>
