@@ -22,6 +22,9 @@ const Navbar = () => {
       bootstrapButton.click(); 
     }
   }
+  function fakeLogOut() {
+    localStorage.removeItem("loggedin")
+  }
   return (
     <header className="container-fluid navbar   navbar-expand-sm mb-4 justify-content-space-between ">
       <div className="container-fluid">
@@ -76,7 +79,8 @@ const Navbar = () => {
                         src={avatarImg} 
                         className="login-icon px-2 "
                     />
-                </Link>
+            </Link>
+            <button onClick={fakeLogOut} className="px-1">X</button>
           </nav>
         </div>
       </div>

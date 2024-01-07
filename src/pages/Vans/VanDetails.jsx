@@ -1,17 +1,17 @@
-import React from 'react'
+import React, {Suspense} from 'react'
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useParams, useLoaderData } from 'react-router-dom'
+import { Link, useLocation, useParams, useLoaderData, defer, Await } from 'react-router-dom'
 import { getVans } from '../../../api'
 
 export function loader({ params }) {
-    return getVans(params.id)
+    return defer({vans:getVans(params.id)})
 }
 
 
 const VanDetails = () => {
     const location = useLocation()
 
-    const van = useLoaderData()
+    const dataPromise = useLoaderData()
 
 
     const search = location.state?.search || "";
@@ -19,7 +19,11 @@ const VanDetails = () => {
 
     return (
         <div className="van-detail-container">
-            <Link
+            <Suspense fallback={<h2>Loading van...</h2>}>
+                <Await resolve={dataPromise.vans}>{(van)=>{
+                   return (
+                    <>
+                    <Link
                 to={`..${search}`}
                 relative="path"
                 className="back-button"
@@ -32,6 +36,12 @@ const VanDetails = () => {
                     <p>{van.description}</p>
                     <button className="link-button">Rent this van</button>
                 </div>
+                </>
+                   ) 
+                    
+                }}</Await>
+            </Suspense>
+            
         </div>
     )
 }
